@@ -1,5 +1,7 @@
 # ReactRails in Om-Next
 
+(NOTE: Just found out from David Nolen that we want to do this in late December or early January due to some blocking issues for om-next)
+
 Test project to convert http://www.reactrails.com to [om-next](https://github.com/omcljs/om/wiki/Quick-Start-(om.next))
 
 Here's the key functionality to support:
