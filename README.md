@@ -12,6 +12,9 @@ Here's the key functionality to support:
 ## Nice to Have
 * Nice to show off some react features
 * Deployable to heroku
+* Backend of Datomic
+
+This is a good example: https://github.com/swannodette/om-next-demo
 
 Anything else to add to this list?
 
