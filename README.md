@@ -16,3 +16,5 @@ Here's the key functionality to support:
 Anything else to add to this list?
 
 Please submit PRs!
+
+By the way, if there's an alternative ClojureScript framework that's preferable, let me know and I'll create a separate repo to compare that one.
