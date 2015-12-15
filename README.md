@@ -6,13 +6,15 @@ It shows [Om.next](https://github.com/omcljs/om/wiki/Quick-Start-%28om.next%29),
 
 ## Kicking the Tires
 
-To run it, you need to [install leiningen](http://leiningen.org/), the build tool and dependency manager for Clojure.
+You can see this app running at https://reactrails-in-om-next.herokuapp.com
+
+To run it on your machine, you need to [install leiningen](http://leiningen.org/), the build tool and dependency manager for Clojure.
 
 Clone this directory and cd into it, then type:
 
-    lein run
+    lein with-profile dev run
 
-Open a browser to http://localhost:8080 and you are in business!
+Open a browser to http://localhost:5000 and you are in business!
 
 ## Development
 
