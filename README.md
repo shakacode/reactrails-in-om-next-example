@@ -1,25 +1,39 @@
-# ReactRails in Om-Next
+# Om.next to Datomic
 
-(NOTE: Just found out from David Nolen that we want to do this in late December or early January due to some blocking issues for om-next)
+This is a project, in the spirit of [www.reactrails.com](http://www.reactrails.com), which shows a full Clojure/ClojureScript stack that implements a consist outlook toward functional programming, immutable data, and composable abstractions.
 
-Test project to convert http://www.reactrails.com to [om-next](https://github.com/omcljs/om/wiki/Quick-Start-(om.next))
+It shows [Om.next](https://github.com/omcljs/om/wiki/Quick-Start-%28om.next%29), the wrapper for React, on the front-end. It uses [Transit](https://github.com/cognitect/transit-format) to communicate the data over the wire. And [Datomic](http://www.datomic.com/) as the database.
 
-Here's the key functionality to support:
+## Kicking the Tires
 
-## Essentials
-* Simple, single table model with no authentication.
-* Handling async calls
-* Simple validations, server and/or client
+To run it, you need to [install leiningen](http://leiningen.org/), the build tool and dependency manager for Clojure.
 
-## Nice to Have
-* Nice to show off some react features
-* Deployable to heroku
-* Backend of Datomic
+Clone this directory and cd into it, then type:
 
-This is a good example: https://github.com/swannodette/om-next-demo
+    lein run
 
-Anything else to add to this list?
+Open a browser to http://localhost:8080 and you are in business!
 
-Please submit PRs!
+## Development
 
-By the way, if there's an alternative ClojureScript framework that's preferable, let me know and I'll create a separate repo to compare that one.
+The development experience on the front-end is pretty sweet where the browser automatically updates whenever you save a source file.
+
+To get an interactive development environment run:
+
+    lein figwheel
+
+and open your browser at [localhost:3449](http://localhost:3449/).
+This will auto compile and send all changes to the browser without the
+need to reload. After the compilation process is complete, you will
+get a Browser Connected REPL. An easy way to try it is:
+
+    (js/alert "Am I connected?")
+
+and you should see an alert in the browser window.
+
+To create a production build run:
+
+    lein cljsbuild once min
+
+And open your browser in `resources/public/index.html`. You will not
+get live reloading, nor a REPL. 
