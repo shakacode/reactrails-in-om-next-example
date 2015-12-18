@@ -29,7 +29,6 @@
 
 (defmethod readf :comment/list
   [{:keys [conn query] :as req} _ params]
-  (println ":comment/list")
   {:value (comments (d/db conn) query #_params)})
 
 
@@ -46,12 +45,13 @@
 
 (defmethod mutatef 'comment/create
   [{:keys [conn]} k {:keys [:comment/author :comment/text :comment/time] :as com}]
-  {:value [:comments/list]
+  {:value {:keys  [:comments/list]}
    :action
    (fn []
      @(d/transact conn
         [{:db/id          #db/id[:db.part/user]
           :comment/author author
           :comment/text   text
-          :comment/time   time}]))})
+          :comment/time   time}])
+     200)})
 

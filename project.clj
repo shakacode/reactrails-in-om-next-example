@@ -30,8 +30,8 @@
             [lein-ring "0.9.7"]
             [lein-environ "1.0.1"]]
 
-;  :hooks [environ.leiningen.hooks]
-
+  :min-lein-version "2.0.0"
+  
   :uberjar-name "heroku-omnext-to-datomic.jar"
 
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
@@ -40,12 +40,11 @@
              :production {:env {:production true}}
              :uberjar {:aot :all}}
 
- ; :ring {:handler omnext-to-datomic.handler/app}
   :main omnext-to-datomic.handler
 
   :source-paths ["src" "src/clj"]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled/out" "target"]
+  :clean-targets ^{:protect false} ["resources/public/js/compiled/out" "target" "resources/public/compiled/omnext_to_datomic.js"]
 
   :cljsbuild {:builds
               [{:id "dev"
