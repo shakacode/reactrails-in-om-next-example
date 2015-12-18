@@ -3,6 +3,7 @@
   (:import (java.io ByteArrayOutputStream))
   (:require [cognitect.transit :as transit]
             [cognitect.transit :as t]
+            [datomic.api :as d]
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]]
             [ring.middleware.reload :refer [wrap-reload]]
@@ -13,6 +14,8 @@
             [ring.middleware.transit :as tr]
             [compojure.core :refer :all]
             [compojure.route :as route]
+            [om.next.server :as om]
+            [omnext-to-datomic.parser :as parser]
             [omnext-to-datomic.db :as db]))
 
 (defn write-transit [x]
@@ -23,29 +26,22 @@
     (.reset baos)
     ret))
 
-(defn transit-response [response]
-  {:status 200
-   :headers {"Content-Type" "application/transit+json; charset=utf-8"}
-   :body (write-transit response)})
 
-(defn get-comments []
-  (transit-response
-   { :comment/list  (db/comments)}))
+(defn generate-response [data & [status]]
+  {:status  (or status 200)
+   :headers {"Content-Type" "application/transit+json"}
+   :body    (write-transit data)})
 
-(defn save-comment [comment]
- (db/add-comment comment)
- (get-comments))
 
-(defn process-query [{:keys [transit-params] :as req}]
-  ; this is very naive and should be replaced with the om.next parser
-  (if  (and (vector? transit-params)
-            (= (ffirst transit-params) `submit/comment))
-    (save-comment (-> transit-params first second))
-    (get-comments)))
+(defn api [req]
+  (generate-response
+   ((om/parser {:read parser/readf :mutate parser/mutatef})
+    {:conn (:datomic-connection req)} (:transit-params req))))
+
 
 (defroutes app-routes 
   (GET "/" [] (rr/content-type (rr/resource-response "index.html" {:root "public"}) "text/html"))
-  (POST "/api" [] process-query )
+  (POST "/api" [] api )
   (route/not-found "Not Found"))
 
 (defn wrap-transit-logging [handler]
@@ -54,9 +50,17 @@
       (println "Logging transit-params" transit))
     (handler req)))
 
+(defn wrap-connection [handler]
+  (fn [req]
+    (let [uri  "datomic:mem://sample"
+          conn (d/connect uri) ]
+      (handler (assoc req :datomic-connection conn)))))
+
+
 (def app
   (-> app-routes
      ; wrap-transit-logging
+      wrap-connection
       wrap-content-type
       (wrap-resource "public")
       wrap-params
@@ -64,6 +68,6 @@
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))
-        handler (if (env :production) (wrap-reload app) app)]
+        handler (if (env :production) app (wrap-reload app))]
     (run-server handler {:port port :join? false})
     (println "Server started on port " port)))

@@ -18,6 +18,7 @@
 
 
 (defn merge-response [state res]
+  (println res)
   (let [comments (:comment/list res)
         by-time  (into {}
                        (map (fn [c][(:comment/time c) c]) comments))
@@ -74,7 +75,7 @@
 
 (defmulti mutate om/dispatch)
 
-(defmethod mutate 'submit/comment
+(defmethod mutate 'comment/create
   [{:keys [state]} _  c]
   {:remote true
    :action
@@ -185,7 +186,7 @@
           (let [{:keys [nav/index] :as props} (om/props this)
                 submit-fn (fn [e] (let [com (add-time
                                              (get-form-vals e))]
-                                    (om/transact! this `[(submit/comment ~com) :comment/list ])))
+                                    (om/transact! this `[(comment/create ~com) :comment/list ])))
                 change-fn (fn [e] (let  [a (-> e .-target .-value)]
                                     (om/transact! this `[(change/author {:author ~a})])))
                 props (om/computed props {:submit submit-fn :change change-fn})]
@@ -272,7 +273,7 @@
 (def reconciler
   (om/reconciler
    {:state  init-data
-    :merge-tree merge-response
+ ;   :merge-tree merge-response
     :parser (om/parser {:read read :mutate mutate})
     :send (transit-post "/api")}))
 
