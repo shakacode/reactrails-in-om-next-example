@@ -1,7 +1,7 @@
 (ns omnext-to-datomic.handler
   (:gen-class)
   (:import (java.io ByteArrayOutputStream))
-  (:require [cognitect.transit :as transit]
+  (:require; [cognitect.transit :as transit]
             [cognitect.transit :as t]
             [datomic.api :as d]
             [environ.core :refer [env]]
@@ -55,7 +55,6 @@
     (let [uri  "datomic:mem://sample"
           conn (d/connect uri) ]
       (handler (assoc req :datomic-connection conn)))))
-
 
 (def app
   (-> app-routes
