@@ -16,46 +16,33 @@
               :db/ident :comment/time
               :db/valueType :db.type/long
               :db/cardinality :db.cardinality/one
-              :db.install/_attribute :db.part/db}
-             ])
+              :db.install/_attribute :db.part/db}])
 
 (def sample-comments [ {:comment/author "Bob"
                         :comment/time 1450142890738
-                 :comment/text "The Price Is Right!"}])
+                        :comment/text "The Price Is Right!"}])
+
 
 (def uri  "datomic:mem://sample")
 
-(d/create-database uri)
-
-(def conn (d/connect uri))
-
-(defn install-schema []
+(defn install-schema [conn]
   @(d/transact conn schema))
 
 (defn add-tempid [m]
   (assoc m :db/id (tempid :db.part/user)))
 
-(defn add-comment [c]
+(defn add-comment [conn c]
   (let [tx (add-tempid c)]
     (d/transact conn [tx])))
 
-(defn populate-db []
+(defn populate-db [conn]
   (doseq [comment sample-comments]
-    (add-comment comment)))
+    (add-comment conn comment)))
 
-(install-schema)
+(defn initialize-db []
+  (d/create-database uri)
+  (let [conn (d/connect uri)]
+    (install-schema conn)
+    (populate-db conn)))
 
-(populate-db)
-
-(defn touch-ent [db id]
-  (let [ent (d/entity db id)] 
-    (if (nil? ent)
-      nil
-      (into {} (d/touch ent)))))
-
-(defn comments [] 
-  (let [this-db (db conn)
-        result (q '[:find ?e
-                    :where [?e :comment/author]]
-                  this-db)]
-    (map (fn [[id]] (touch-ent this-db id)) result)))
+(initialize-db)
