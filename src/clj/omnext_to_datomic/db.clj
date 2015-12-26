@@ -19,7 +19,7 @@
               :db.install/_attribute :db.part/db}])
 
 (def sample-comments [ {:comment/author "Bob"
-                        :comment/time 1450142890738
+                        :comment/time (System/currentTimeMillis)
                         :comment/text "The Price Is Right!"}])
 
 
