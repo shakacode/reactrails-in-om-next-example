@@ -1,9 +1,23 @@
 (ns omnext-to-datomic.parser
-  (:refer-clojure :exclude [read])
   (:require [datomic.api :as d]))
 
 ;; =============================================================================
 ;; Reads
+(defn comments
+  ([db]
+   (comments db nil))
+  ([db selector]
+   (comments db selector nil))
+  ([db selector _]
+   ;; TODO: Code to do as-of filtering is not complete and does not currently work.
+   ;; This should be removed or made working.
+   ;; Not using 3rd arg of params right now.
+   (d/q
+    '[:find [(pull ?eid selector) ...]
+      :in $ selector
+      :where
+      [?eid :comment/author]]
+    db (or selector '[*]))))
 
 (defmulti readf (fn [env k params] k))
 
@@ -11,21 +25,6 @@
   [_ k _]
   (println "No handler for read key " k)
   {:value {:error (str "No handler for read key " k)}})
-
-(defn comments
-  ([db]
-   (comments db nil))
-  ([db selector]
-   (comments db selector nil))
-  ([db selector {:keys [filter as-of]}]
-   (let [db (cond-> db
-              as-of (d/as-of as-of))]
-     (d/q
-      '[:find [(pull ?eid selector) ...]
-        :in $ selector
-        :where
-        [?eid :comment/author]]
-      db (or selector '[*])))))
 
 (defmethod readf :comment/list
   [{:keys [conn query] :as req} _ params]

@@ -1,7 +1,7 @@
 (ns omnext-to-datomic.handler
   (:gen-class)
   (:import (java.io ByteArrayOutputStream))
-  (:require [cognitect.transit :as t]
+  (:require [cognitect.transit :as transit]
             [datomic.api :as d]
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]]
@@ -20,8 +20,8 @@
 
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
-        w    (t/writer baos :json)
-        _    (t/write w x)
+        w    (transit/writer baos :json)
+        _    (transit/write w x)
         ret  (.toString baos)]
     (.reset baos)
     ret))
