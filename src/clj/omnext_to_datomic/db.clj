@@ -39,10 +39,10 @@
   (doseq [comment sample-comments]
     (add-comment conn comment)))
 
-(defn initialize-db []
+(defn initialize-db [uri]
   (d/create-database uri)
   (let [conn (d/connect uri)]
     (install-schema conn)
     (populate-db conn)))
 
-(initialize-db)
+(initialize-db uri)

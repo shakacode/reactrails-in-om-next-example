@@ -262,8 +262,8 @@
               [:p "Hot-reloading brought to you by Figwheel"]
               [:div {:class "comment-box"}
                [:h1 "Comments"]
-               [:p "Text takes Github Flavored Markdown. Only Comments from the last 24 hours are
-    displayed." [:br][:b "Name"] " is preserved." [:b "Text"] " is reset, between submits."]
+               [:p "Text takes Github Flavored Markdown. Only Comments from the last 24 hours are displayed."
+                [:br][:b "Name"] " is preserved." [:b "Text"] " is reset, between submits."]
                [:div {:class "commentBox container"}
                 (form-selector props)
                 [:hr]

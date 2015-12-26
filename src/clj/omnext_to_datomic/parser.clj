@@ -29,9 +29,7 @@
 
 (defmethod readf :comment/list
   [{:keys [conn query] :as req} _ params]
-  {:value (comments (d/db conn) query #_params)})
-
-
+  {:value (comments (d/db conn) query params)})
 
 
 ;; =============================================================================

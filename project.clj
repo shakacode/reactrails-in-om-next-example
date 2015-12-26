@@ -7,9 +7,10 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
                  [org.clojure/core.async "0.2.374"]
-                 [com.datomic/datomic-free "0.9.5344"]
+                 [org.clojure/test.check "0.8.2"]
                  [com.cognitect/transit-clj "0.8.285"]
                  [com.cognitect/transit-cljs "0.8.225"]
+                 [com.datomic/datomic-free "0.9.5344"]
                  ; server
                  [ring-transit "0.1.4"]
                  [http-kit "2.1.18"]
@@ -23,7 +24,8 @@
                  [cljsjs/react-dom-server "0.14.3-0"]
                  ;; for deployment
                  [environ "1.0.1"]
-                 [ring/ring-devel "1.4.0"]]
+                 [ring/ring-devel "1.4.0"]
+                 [ring/ring-mock "0.3.0"]]
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-1" :exclusions [org.clojure/clojure org.clojure/tools.reader] ]

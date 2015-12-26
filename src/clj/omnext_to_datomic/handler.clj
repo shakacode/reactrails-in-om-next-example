@@ -1,8 +1,7 @@
 (ns omnext-to-datomic.handler
   (:gen-class)
   (:import (java.io ByteArrayOutputStream))
-  (:require; [cognitect.transit :as transit]
-            [cognitect.transit :as t]
+  (:require [cognitect.transit :as t]
             [datomic.api :as d]
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]]
@@ -15,7 +14,8 @@
             [compojure.core :refer :all]
             [compojure.route :as route]
             [om.next.server :as om]
-            [omnext-to-datomic.parser :as parser]
+            [om.transit :as omt]
+            [omnext-to-datomic.parser :as p]
             [omnext-to-datomic.db :as db]))
 
 (defn write-transit [x]
@@ -26,6 +26,7 @@
     (.reset baos)
     ret))
 
+(def parser (om/parser {:read p/readf :mutate p/mutatef}))
 
 (defn generate-response [data & [status]]
   {:status  (or status 200)
@@ -35,7 +36,7 @@
 
 (defn api [req]
   (generate-response
-   ((om/parser {:read parser/readf :mutate parser/mutatef})
+   (parser
     {:conn (:datomic-connection req)} (:transit-params req))))
 
 
@@ -44,10 +45,9 @@
   (POST "/api" [] api )
   (route/not-found "Not Found"))
 
-(defn wrap-transit-logging [handler]
+(defn wrap-logging [handler]
   (fn [req]
-    (when-let [transit (:transit-params req)]
-      (println "Logging transit-params" transit))
+    (println "Logging request" req)
     (handler req)))
 
 (defn wrap-connection [handler]
@@ -58,7 +58,7 @@
 
 (def app
   (-> app-routes
-     ; wrap-transit-logging
+      wrap-logging
       wrap-connection
       wrap-content-type
       (wrap-resource "public")
