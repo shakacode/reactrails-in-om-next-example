@@ -18,10 +18,12 @@
               :db/cardinality :db.cardinality/one
               :db.install/_attribute :db.part/db}])
 
-(def sample-comments [ {:comment/author "Bob"
-                        :comment/time (System/currentTimeMillis)
-                        :comment/text "The Price Is Right!"}])
-
+(def sample-comments [{:comment/author "Bob"
+                       :comment/time (System/currentTimeMillis)
+                       :comment/text "The Price Is Right!"}
+                      {:comment/author "Justin"
+                       :comment/time (+ (System/currentTimeMillis) 1)
+                       :comment/text "Let's go surfing!"}])
 
 (def uri  "datomic:mem://sample")
 
