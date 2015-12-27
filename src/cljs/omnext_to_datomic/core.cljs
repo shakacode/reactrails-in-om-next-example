@@ -251,7 +251,8 @@
 (defui RootView
   static om/IQuery
   (query [this]
-         [{:nav/index (om/get-query FormSelector)} {:comment/list (om/get-query CommentView)}
+         [{:nav/index (om/get-query FormSelector)}
+          {:comment/list (om/get-query CommentView)}
           {:comment/form (om/get-query CommentForm)}])
   Object
   (render [this]
