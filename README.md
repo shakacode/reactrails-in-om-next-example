@@ -1,6 +1,6 @@
 # Om.next to Datomic
 
-This is a project, in the spirit of [www.reactrails.com](http://www.reactrails.com), which shows a full Clojure/ClojureScript stack that implements a consist outlook toward functional programming, immutable data, and composable abstractions.
+This is a project, in the spirit of [www.reactrails.com](http://www.reactrails.com), which shows a full Clojure/ClojureScript stack that implements a consistent outlook toward functional programming, immutable data, and composable abstractions.
 
 It shows [Om.next](https://github.com/omcljs/om/wiki/Quick-Start-%28om.next%29), the wrapper for React, on the front-end. It uses [Transit](https://github.com/cognitect/transit-format) to communicate the data over the wire. And [Datomic](http://www.datomic.com/) as the database.
 
