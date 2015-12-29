@@ -40,7 +40,13 @@
                                   [ring/ring-mock "0.3.0"]
                                   ]}
              :production {:env {:production true}}
-             :uberjar {:aot :all}}
+             :uberjar {:hooks [leiningen.cljsbuild]
+                       :aot :all
+                       :env {:production true}
+                       :cljsbuild  {:builds [  {:app
+                                                {:source-paths ["src/cljs"]
+                                                 :compiler {:optimizations :advanced
+                                                            :pretty-print false}}}]}}}
 
   :main omnext-to-datomic.handler
 
