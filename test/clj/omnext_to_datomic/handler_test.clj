@@ -18,8 +18,6 @@
 
 (t/use-fixtures :once db-fixture)
 
-
-
 (deftest test-index
   (let [ret (handler/app (mock/request :get "/"))]
     (is (= 200 (:status ret)))
@@ -48,8 +46,21 @@
 (deftest test-add-comment
   (let [ret (handler/parser
              {:conn conn}
-             '[(comment/create {:comment/author "Fred", :comment/text "It's a Beautiful Day in the neighborhood.", :comment/time 1451099053434}) {:comment/list [:comment/author :comment/time :comment/text]}]
+             '[(comment/create {:comment/author "Fred F",
+                                :comment/text "Yabba Dabba Doo!",
+                                :comment/time (System/currentTimeMillis)})
+               {:comment/list [:comment/author :comment/time :comment/text]}])]
+    (is (=  (filter #(= "Fred F" (:comment/author %) ) (:comment/list ret))
+           ()))))
 
-             )]
-    (is (= (count (:comment/list ret))
-           2))))
+
+(deftest test-old-comment-not-returned
+  (let [ret (handler/parser
+             {:conn conn}
+             '[(comment/create {:comment/author "Zipporah",
+                                :comment/text "I have become a stranger in a strange land.",
+                                :comment/time #inst "2015-12-31"})
+               {:comment/list [:comment/author :comment/time :comment/text]}])]
+    (is (= (filter #(= "Zipporah" (:comment/author %)) (:comment/list ret))
+           ()))))
+

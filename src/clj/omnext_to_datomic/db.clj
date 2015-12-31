@@ -23,7 +23,10 @@
                        :comment/text "The Price Is Right!"}
                       {:comment/author "Justin"
                        :comment/time (+ (System/currentTimeMillis) 1)
-                       :comment/text "Let's go surfing!"}])
+                       :comment/text "Let's go surfing!"}
+                      {:comment/author "Fred R."
+                       :comment/text "It's a beautiful day in the neighborhood."
+                       :comment/time #inst "2015-12-31"}])
 
 (def uri  "datomic:mem://sample")
 

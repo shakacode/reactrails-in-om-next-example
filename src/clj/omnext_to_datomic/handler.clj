@@ -58,7 +58,7 @@
 
 (def app
   (-> app-routes
-      wrap-logging
+     ; wrap-logging
       wrap-connection
       wrap-content-type
       (wrap-resource "public")

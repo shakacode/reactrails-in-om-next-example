@@ -12,12 +12,13 @@
    ;; TODO: Code to do as-of filtering is not complete and does not currently work.
    ;; This should be removed or made working.
    ;; Not using 3rd arg of params right now.
-   (d/q
-    '[:find [(pull ?eid selector) ...]
-      :in $ selector
-      :where
-      [?eid :comment/author]]
-    db (or selector '[*]))))
+   (let [yesterday (java.util.Date. (- (System/currentTimeMillis) 86400000))] 
+     (d/q
+      '[:find [(pull ?eid selector) ...]
+        :in $ selector
+        :where
+        [?eid :comment/author]]
+      (d/since db yesterday) (or selector '[*])))))
 
 (defmulti readf (fn [env k params] k))
 
